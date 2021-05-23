@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/obniz@3.8.0/obniz.js"></script>
+  </head>
+  <body>
+    <h1>人感センサー</h1>
+    <div id="obniz-debug"></div>
+
+    <script>
+      var obniz = new Obniz("OBNIZ-ID");
+      var sensor = null;
+      const url = "https://script.google.com/macros/s/xxxxxxxxxx-xxxxxxxxxx/exec";//GASのウェブアプリケーションのURLを指定してください
+
+      obniz.onconnect = async function () {
+        sensor = obniz.wired( "Keyestudio_PIR", { signal:1, vcc:0, gnd:2 } );
+        console.log( sensor );
+        sensor.onchange = function( v ){
+          console.log( v );
+          $.post( url, { value: v } )
+            .done( function( data ){ console.dir( data ); } );
+        };
+      };
+    </script>
+  </body>
+</html>
